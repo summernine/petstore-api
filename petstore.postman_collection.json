@@ -1,0 +1,537 @@
+{
+	"info": {
+		"_postman_id": "b84f5388-9a57-4c04-91f6-de9c4f38691c",
+		"name": "petstore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42250",
+		"_collection_link": "https://www.postman.com/lively-space-819975/workspace/petstore/collection/42250-b84f5388-9a57-4c04-91f6-de9c4f38691c?action=share&source=collection_link&creator=42250"
+	},
+	"item": [
+		{
+			"name": "Find pet id",
+			"item": [
+				{
+					"name": "add pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Add a new pet to the store\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.environment.set(\"petId\", jsonData.id);",
+									"    pm.environment.set(\"petName\", jsonData.name);",
+									"});",
+									"",
+									"pm.test(\"Add a new pet to the store has status available\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql('available')",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 92,\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"name\": \"Poodle\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"status\": \"available\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pet",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get pet id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Returns a single pet\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"petId\"))",
+									"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"petName\"));",
+									"});",
+									"",
+									"pm.test(\"Test data type of response\", function() {",
+									"    pm.expect(jsonData).to.be.an(\"object\");",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");",
+									"    pm.expect(jsonData.category.id).to.be.a(\"number\");",
+									"    pm.expect(jsonData.category.name).to.be.a(\"string\");",
+									"    pm.expect(jsonData.name).to.be.an(\"string\");",
+									"    pm.expect(jsonData.photoUrls).to.be.an(\"array\");",
+									"    pm.expect(jsonData.tags).to.be.an(\"array\");",
+									"    pm.expect(jsonData.tags[0].id).to.be.an(\"number\");",
+									"    pm.expect(jsonData.tags[0].name).to.be.an(\"string\");",
+									"    pm.expect(jsonData.status).to.be.an(\"string\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/pet/{{petId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"{{petId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add pet with just name in the body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Add a new pet to the store\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dunker\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pet",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add pet with empty body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Returns error for empty body\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(415);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pet",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Update pet name",
+			"item": [
+				{
+					"name": "update pet name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Update pet name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.environment.set(\"updatedPetNameId\", jsonData.id);",
+									"    pm.environment.set(\"updatedPetName\", jsonData.name);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 1000,\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"name\": \"Golden Retriever\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"status\": \"available\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pet",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get pet id with updated name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Returns a single pet with updated name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"updatedPetNameId\"))",
+									"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"updatedPetName\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/pet/{{updatedPetNameId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"{{updatedPetNameId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update pet status to pending",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Update pet status to pending\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.environment.set(\"updatedPetStatus\", jsonData.status);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 1000,\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"name\": \"Golden Retriever\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"status\": \"pending\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pet",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get pet id with updated pending status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Returns a single pet with udpated status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"updatedPetNameId\"))",
+									"    pm.expect(jsonData.status).to.eql(pm.environment.get(\"updatedPetStatus\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/pet/{{updatedPetNameId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"{{updatedPetNameId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update pet status to sold",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Update pet status to pending\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.environment.set(\"updatedPetStatus\", jsonData.status);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 1000,\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"name\": \"Golden Retriever\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"status\": \"sold\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pet",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get pet id with updated sold status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Returns a single pet with udpated status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"updatedPetNameId\"))",
+									"    pm.expect(jsonData.status).to.eql(pm.environment.get(\"updatedPetStatus\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/pet/{{updatedPetNameId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"{{updatedPetNameId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete a pet",
+			"item": [
+				{
+					"name": "Delete a pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Deletes a pet\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(jsonData.code).to.eql(200);",
+									"    pm.expect(parseInt(jsonData.message)).to.eql(pm.environment.get(\"petId\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pet/{{petId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"{{petId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get deleted pet id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Returns pet not found\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.have.status(404);",
+									"    pm.expect(jsonData.message).to.eql(\"Pet not found\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/pet/{{petId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"{{petId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

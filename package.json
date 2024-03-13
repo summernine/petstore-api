@@ -1,0 +1,11 @@
+{
+  "name": "petstore-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/newman": "^5.3.6",
+    "newman": "^6.1.1",
+    "newman-reporter-htmlextra": "^1.23.0"
+  }
+}
