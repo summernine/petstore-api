@@ -4,6 +4,7 @@
 
 This is a test for API Automation for petstore.
 
+Git repo - [petstore-api](https://github.com/summernine/petstore-api)
 
 ## Setup
 
